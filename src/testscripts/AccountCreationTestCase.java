@@ -1,5 +1,6 @@
 package testscripts;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -7,6 +8,7 @@ import org.testng.Assert;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.BeforeMethod;
+import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
 import base.PredefinedActions;
@@ -15,6 +17,7 @@ import pages.AuthenticationPage;
 import pages.HomePage;
 import pages.MyAccountPage;
 import test_POJO.CreateAccount_Pojo;
+import utility.ReadTestDataXLS;
 
 public class AccountCreationTestCase {
 	@BeforeMethod
@@ -23,8 +26,10 @@ public class AccountCreationTestCase {
 		PredefinedActions.start("http://automationpractice.com");
 	}
 
-	@Test
-	void createNewAccount() throws InterruptedException {
+	@Test(dataProvider = "testData")
+	void createNewAccount(String email, String title, String firstName, String lastName, String password,
+			String birthDay, String birthMonth, String birthYear, String company, String address, String city,
+			String state, String postalCode, String mobilePhone) throws InterruptedException {
 		HomePage homepage = new HomePage();
 		System.out.println("Step 2: Click on Sign-in button");
 		AuthenticationPage authPage = homepage.clickOnSignIn();
@@ -33,7 +38,7 @@ public class AccountCreationTestCase {
 		Assert.assertEquals(pageTitle, "Login - My Store");
 		CreateAccount_Pojo pojo = new CreateAccount_Pojo();
 		System.out.println("Step 3: Entered e-mail in e-mail address field");
-		pojo.setEmail("automation_7@gmail.com");
+		pojo.setEmail(email);
 		authPage.enterEmail(pojo.getEmail());
 		System.out.println("Step 4: Click on Create Account button");
 		AccountCreation accountCreation = authPage.clickOnCreateAccountButton();
@@ -42,45 +47,45 @@ public class AccountCreationTestCase {
 		System.out.println("Step 5: Validate if user has successfully navigated to Create An Account page");
 		Assert.assertEquals(label, "CREATE AN ACCOUNT");
 		System.out.println("Step 6: Populate Title");
-		pojo.setGender("M");
+		pojo.setGender(title);
 		accountCreation.populateGender(pojo.getGender());
 		System.out.println("Step 7: Populate First Name");
-		pojo.setFirstName("James");
+		pojo.setFirstName(firstName);
 		accountCreation.populateFirstName(pojo.getFirstName());
 		System.out.println("Step 8: Populate Last Name");
-		pojo.setLastName("Anderson");
+		pojo.setLastName(lastName);
 		accountCreation.populateLastName(pojo.getLastName());
 		System.out.println("Step 9: Populate Password");
-		pojo.setPassword("Amara_12345");
+		pojo.setPassword(password);
 		accountCreation.populatePassword(pojo.getPassword());
 		System.out.println("Step 10: Populate Birth-Day");
-		pojo.setBirthDay("30");
+		pojo.setBirthDay(birthDay);
 		accountCreation.populateBirthDay(pojo.getBirthDay());
-		System.out.println("Step 10: Populate Birth-Month");
-		pojo.setBirthMonth("10");
+		System.out.println("Step 11: Populate Birth-Month");
+		pojo.setBirthMonth(birthMonth);
 		accountCreation.populateBirthMonth(pojo.getBirthMonth());
-		System.out.println("Step 10: Populate Birth-Year");
-		pojo.setBirthYear("1979");
+		System.out.println("Step 12: Populate Birth-Year");
+		pojo.setBirthYear(birthYear);
 		accountCreation.populateBirthYear(pojo.getBirthYear());
-		System.out.println("Step 11: Populate address");
-		pojo.setAddress("12th Main Street Lakeshore Ave");
+		System.out.println("Step 13: Populate address");
+		pojo.setAddress(address);
 		accountCreation.populateAddress(pojo.getAddress());
-		System.out.println("Step 12: Populate City");
-		pojo.setCity("Willington");
+		System.out.println("Step 14: Populate City");
+		pojo.setCity(city);
 		accountCreation.populateCity(pojo.getCity());
-		System.out.println("Step 13: Populate State");
-		pojo.setState("California");
+		System.out.println("Step 15: Populate State");
+		pojo.setState(state);
 		accountCreation.populateState(pojo.getState());
-		System.out.println("Step 14: Populate Zip");
-		pojo.setZip("12345");
+		System.out.println("Step 16: Populate Zip");
+		pojo.setZip(postalCode);
 		accountCreation.populateZip(pojo.getZip());
-		System.out.println("Step 15: Populate Mobile Phone");
-		pojo.setmPhone("9768574899");
+		System.out.println("Step 17: Populate Mobile Phone");
+		pojo.setmPhone(mobilePhone);
 		accountCreation.populateMobile(pojo.getmPhone());
-		System.out.println("Step 16: Click on register button");
+		System.out.println("Step 18: Click on register button");
 		MyAccountPage myaccount = accountCreation.clickOnRegisterButton();
 		String accountName = myaccount.validateAccountName();
-		System.out.println("Step 17: Validate if correct user name is being displayed besides sign-out button");
+		System.out.println("Step 19: Validate if correct user name is being displayed besides sign-out button");
 		String expectedAccountName = pojo.getFirstName() + " " + pojo.getLastName();
 		Assert.assertEquals(accountName, expectedAccountName);
 	}
@@ -124,6 +129,13 @@ public class AccountCreationTestCase {
 		Assert.assertEquals(actualErrorDetails, expectedErrorDetails);
 		System.out.println("Actual Error: " + actualErrorDetails);
 		System.out.println("Expected Error: " + expectedErrorDetails);
+	}
+
+	@DataProvider(name = "testData")
+	 String[] [] readExcel() throws IOException {
+		String[][] testData = ReadTestDataXLS.readXls("Test_Data.xlsx", "AccountCreation");
+		
+		return testData;
 	}
 
 	@AfterMethod
