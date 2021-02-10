@@ -26,9 +26,9 @@ public class AccountCreation extends PredefinedActions {
 
 	public void populateGender(String gender) {
 		wait = new WebDriverWait(driver, 10);
-		if (gender != "F") {
+		if (gender.equals("M")) {
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#id_gender1"))).click();
-		} else
+		} else 
 			wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#id_gender2"))).click();
 	}
 
