@@ -14,8 +14,7 @@ public class ReadTestDataXLS {
 
 	public static String[][] readXls(String fileName, String tabName) throws IOException {
 
-		String path = "C:\\Users\\Prasad Chitale\\Documents\\java_selenium\\HybridFramework_Practice_Prasad_C\\resources\\testdata\\"
-				+ fileName + "";
+		String path = "./resources/testdata/"+ fileName + "";
 		File file = new File(path);
 		FileInputStream inputstream = new FileInputStream(file);
 		XSSFWorkbook workbook = new XSSFWorkbook(inputstream);
