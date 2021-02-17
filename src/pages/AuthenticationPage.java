@@ -27,6 +27,24 @@ public class AuthenticationPage extends PredefinedActions{
 		return pageTitle;
 	}
 	
+	public void enterEmailForLogin(String email) {
+		WebDriverWait wait = new WebDriverWait(driver,10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#email"))).sendKeys(email);
+	}
+	
+	public void enterPassword(String password) {
+		WebDriverWait wait = new WebDriverWait(driver,10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#passwd"))).sendKeys(password);
+		
+	}
+	
+	public MyAccountPage clickSignIn() {
+		WebDriverWait wait = new WebDriverWait(driver,10);
+		wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("#SubmitLogin"))).click();
+		return new MyAccountPage();
+	}
+	
+	
 	
 
 }
