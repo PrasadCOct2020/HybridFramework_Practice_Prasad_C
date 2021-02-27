@@ -1,132 +1,135 @@
 package pages;
 
+import java.io.FileNotFoundException;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import base.PredefinedActions;
+import configuration.PropertyFilesPathConstants;
+import utility.ReadPropertyFile;
 
 public class AccountCreation extends PredefinedActions {
-	WebDriverWait wait;
-	WebElement element;
+
+	private ReadPropertyFile createAccountPropFile;
+	private static AccountCreation createAccount;
+
+	private AccountCreation() {
+		try {
+			createAccountPropFile = new ReadPropertyFile(PropertyFilesPathConstants.ACCOUNT_CREATION_PAGE_PROP_FILE_PATH);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static AccountCreation getInstance() {
+		if (createAccount == null) {
+			createAccount = new AccountCreation();
+		}
+
+		return createAccount;
+	}
 
 	public String validatePage() {
-		WebDriverWait wait = new WebDriverWait(driver, 10);
-		WebElement element = wait
-				.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//div[@id = 'noSlide']/h1")));
-
-		return element.getText();
+		return getElementText(createAccountPropFile.getLocator("pageHeader"),true);
 	}
 
 	public void populateGender(String gender) {
-		wait = new WebDriverWait(driver, 10);
-		if (gender != "F") {
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#id_gender1"))).click();
+
+		if (gender.equals("M")) {
+			clickOnElement(createAccountPropFile.getLocator("genderMale"),false);
 		} else
-			wait.until(ExpectedConditions.presenceOfElementLocated(By.cssSelector("#id_gender2"))).click();
+			clickOnElement(createAccountPropFile.getLocator("genderFemale"),false);
+
 	}
 
 	public void populateFirstName(String fName) {
 		if (fName != null) {
-			driver.findElement(By.cssSelector("#customer_firstname")).sendKeys(fName);
+			sendKeysToElement(createAccountPropFile.getLocator("firstName"), fName,false);
 		}
 	}
 
 	public void populateLastName(String lName) {
 		if (lName != null) {
-			driver.findElement(By.cssSelector("#customer_lastname")).sendKeys(lName);
+			sendKeysToElement(createAccountPropFile.getLocator("lastName"), lName,false);
 		}
 	}
 
 	public void populatePassword(String password) {
 		if (password != null) {
-			driver.findElement(By.cssSelector("#passwd")).sendKeys(password);
+			sendKeysToElement(createAccountPropFile.getLocator("password"), password,false);
 		}
 	}
 
 	public void populateBirthDay(String day) {
 		if (day != null) {
-			element = driver.findElement(By.cssSelector("#days"));
-			Select oSelectDay = new Select(element);
-			oSelectDay.selectByValue(day);
+			selectValueFromDropDown(createAccountPropFile.getLocator("birthDay"), "value", day,false);
 		}
 	}
 
 	public void populateBirthMonth(String month) {
 		if (month != null) {
-			element = driver.findElement(By.cssSelector("#months"));
-			Select oSelectMonth = new Select(element);
-			oSelectMonth.selectByValue(month);
+			selectValueFromDropDown(createAccountPropFile.getLocator("birthMonth"), "value", month,false);
 		}
 	}
 
 	public void populateBirthYear(String year) {
 		if (year != null) {
-			element = driver.findElement(By.cssSelector("#years"));
-			Select oSelectYear = new Select(element);
-			oSelectYear.selectByValue(year);
+			selectValueFromDropDown(createAccountPropFile.getLocator("birthYear"), "value", year,false);
 		}
 	}
 
 	public void populateAddress(String address) {
 
 		if (address != null) {
-			driver.findElement(By.xpath("//input[@id = 'address1']")).sendKeys(address);
+			sendKeysToElement(createAccountPropFile.getLocator("address"), address,false);
 		}
 	}
 
 	public void populateCity(String city) {
 		if (city != null) {
-			driver.findElement(By.xpath("//input[@id = 'city']")).sendKeys(city);
+			sendKeysToElement(createAccountPropFile.getLocator("city"), city,false);
 		}
 	}
 
 	public void populateState(String state) {
 		if (state != null) {
-			element = driver.findElement(By.xpath("//select[@id = 'id_state']"));
-			Select oSelectState = new Select(element);
-			oSelectState.selectByVisibleText(state);
+			selectValueFromDropDown(createAccountPropFile.getLocator("state"), "visibletext", state,false);
 		}
 	}
 
 	public void populateZip(String zip) {
 		if (zip != null) {
-			driver.findElement(By.xpath("//input[@id = 'postcode']")).sendKeys(zip);
+			sendKeysToElement(createAccountPropFile.getLocator("postalCode"), zip,false);
 		}
 	}
 
 	public void populateMobile(String mobile) {
 		if (mobile != null) {
-			driver.findElement(By.cssSelector("#phone_mobile")).sendKeys(mobile);
+			sendKeysToElement(createAccountPropFile.getLocator("mobilePhone"), mobile,false);
 		}
 	}
 
 	public MyAccountPage clickOnRegisterButton() {
 
-		driver.findElement(By.id("submitAccount")).click();
+		clickOnElement(createAccountPropFile.getLocator("registerButton"),false);
 
-		return new MyAccountPage();
+		return MyAccountPage.getInstance();
 	}
-	
+
 	public ArrayList<String> getValidationErrorDetails() {
-		WebDriverWait wait = new WebDriverWait(driver,10);
 		List<WebElement> listOfErrorElements = new ArrayList<WebElement>();
-		WebElement element = driver.findElement(By.xpath("//div[@class = 'alert alert-danger']/p"));
-		String str = element.getText();
+		String str = getElementText(createAccountPropFile.getLocator("error"),true);
 		ArrayList<String> actualErrorDetails = new ArrayList<String>();
 		actualErrorDetails.add(str);
-		listOfErrorElements = wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(By.xpath("//div[@class = 'alert alert-danger']//ol/li")));
-		for(WebElement errorElement : listOfErrorElements) {
-			String errorMsg = errorElement.getText();
+		listOfErrorElements = getElements(createAccountPropFile.getLocator("validationErrors"),true);
+		for (WebElement errorElement : listOfErrorElements) {
+			String errorMsg = getElementText(errorElement);
 			actualErrorDetails.add(errorMsg);
 		}
-		
+
 		return actualErrorDetails;
 	}
 
