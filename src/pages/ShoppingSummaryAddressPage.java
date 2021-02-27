@@ -1,5 +1,6 @@
 package pages;
 
+
 import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
@@ -54,6 +55,7 @@ public class ShoppingSummaryAddressPage extends PredefinedActions {
 
 	public LinkedList<String> validateDeliveryAddress() {
 
+
 		List<WebElement> addressElements = getElements(addressSummaryPagePropFile.getLocator("deliveryAddress"),false);
 		LinkedList<String> deliveryAddress = new LinkedList<String>();
 		for (WebElement element : addressElements) {
@@ -61,6 +63,7 @@ public class ShoppingSummaryAddressPage extends PredefinedActions {
 			if (!str.equals("YOUR DELIVERY ADDRESS") && !str.equals("Update")) {
 				deliveryAddress.add(element.getText());
 			}
+
 		}
 
 		return deliveryAddress;

@@ -42,7 +42,6 @@ public class AccountCreation extends PredefinedActions {
 			clickOnElement(createAccountPropFile.getLocator("genderMale"),false);
 		} else
 			clickOnElement(createAccountPropFile.getLocator("genderFemale"),false);
-
 	}
 
 	public void populateFirstName(String fName) {

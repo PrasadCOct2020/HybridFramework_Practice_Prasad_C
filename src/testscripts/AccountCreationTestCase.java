@@ -40,16 +40,16 @@ public class AccountCreationTestCase {
 
 	@Test(dataProvider = "testData")
 	void createNewAccount(CreateAccount_Pojo createAccountPojo) throws InterruptedException {
+
 		HomePage homepage = HomePage.getInstance();
 		System.out.println("Step 2: Click on Sign-in button");
 		AuthenticationPage authPage = homepage.clickOnSignIn();
 		String pageTitle = authPage.getPageTitle();
 		System.out.println("Step 5: Validate if user has navigated successfully to AUTHENTICATION page");
 		Assert.assertEquals(pageTitle, "Login - My Store");
-		CreateAccount_Pojo pojo = new CreateAccount_Pojo();
+
 		System.out.println("Step 3: Entered e-mail in e-mail address field");
-		pojo.setEmail("automation_7@gmail.com");
-		authPage.enterEmail(pojo.getEmail());
+		authPage.enterEmail(createAccountPojo.getEmail());
 		System.out.println("Step 4: Click on Create Account button");
 		AccountCreation accountCreation = authPage.clickOnCreateAccountButton();
 		Thread.sleep(5000);
@@ -57,46 +57,34 @@ public class AccountCreationTestCase {
 		System.out.println("Step 5: Validate if user has successfully navigated to Create An Account page");
 		Assert.assertEquals(label, "CREATE AN ACCOUNT");
 		System.out.println("Step 6: Populate Title");
-		pojo.setGender("M");
-		accountCreation.populateGender(pojo.getGender());
+		accountCreation.populateGender(createAccountPojo.getGender());
 		System.out.println("Step 7: Populate First Name");
-		pojo.setFirstName("James");
-		accountCreation.populateFirstName(pojo.getFirstName());
+		accountCreation.populateFirstName(createAccountPojo.getFirstName());
 		System.out.println("Step 8: Populate Last Name");
-		pojo.setLastName("Anderson");
-		accountCreation.populateLastName(pojo.getLastName());
+		accountCreation.populateLastName(createAccountPojo.getLastName());
 		System.out.println("Step 9: Populate Password");
-		pojo.setPassword("Amara_12345");
-		accountCreation.populatePassword(pojo.getPassword());
+		accountCreation.populatePassword(createAccountPojo.getPassword());
 		System.out.println("Step 10: Populate Birth-Day");
-		pojo.setBirthDay("30");
-		accountCreation.populateBirthDay(pojo.getBirthDay());
-		System.out.println("Step 10: Populate Birth-Month");
-		pojo.setBirthMonth("10");
-		accountCreation.populateBirthMonth(pojo.getBirthMonth());
-		System.out.println("Step 10: Populate Birth-Year");
-		pojo.setBirthYear("1979");
-		accountCreation.populateBirthYear(pojo.getBirthYear());
-		System.out.println("Step 11: Populate address");
-		pojo.setAddress("12th Main Street Lakeshore Ave");
-		accountCreation.populateAddress(pojo.getAddress());
-		System.out.println("Step 12: Populate City");
-		pojo.setCity("Willington");
-		accountCreation.populateCity(pojo.getCity());
-		System.out.println("Step 13: Populate State");
-		pojo.setState("California");
-		accountCreation.populateState(pojo.getState());
-		System.out.println("Step 14: Populate Zip");
-		pojo.setZip("12345");
-		accountCreation.populateZip(pojo.getZip());
-		System.out.println("Step 15: Populate Mobile Phone");
-		pojo.setmPhone("9768574899");
-		accountCreation.populateMobile(pojo.getmPhone());
-		System.out.println("Step 16: Click on register button");
+		accountCreation.populateBirthDay(createAccountPojo.getBirthDay());
+		System.out.println("Step 11: Populate Birth-Month");
+		accountCreation.populateBirthMonth(createAccountPojo.getBirthMonth());
+		System.out.println("Step 12: Populate Birth-Year");
+		accountCreation.populateBirthYear(createAccountPojo.getBirthYear());
+		System.out.println("Step 13: Populate address");
+		accountCreation.populateAddress(createAccountPojo.getAddress());
+		System.out.println("Step 14: Populate City");
+		accountCreation.populateCity(createAccountPojo.getCity());
+		System.out.println("Step 15: Populate State");
+		accountCreation.populateState(createAccountPojo.getState());
+		System.out.println("Step 16: Populate Zip");
+		accountCreation.populateZip(createAccountPojo.getZip());
+		System.out.println("Step 17: Populate Mobile Phone");
+		accountCreation.populateMobile(createAccountPojo.getmPhone());
+		System.out.println("Step 18: Click on register button");
 		MyAccountPage myaccount = accountCreation.clickOnRegisterButton();
 		String accountName = myaccount.validateAccountName();
-		System.out.println("Step 17: Validate if correct user name is being displayed besides sign-out button");
-		String expectedAccountName = pojo.getFirstName() + " " + pojo.getLastName();
+		System.out.println("Step 19: Validate if correct user name is being displayed besides sign-out button");
+		String expectedAccountName = createAccountPojo.getFirstName() + " " + createAccountPojo.getLastName();
 		Assert.assertEquals(accountName, expectedAccountName);
 	}
 
@@ -143,6 +131,7 @@ public class AccountCreationTestCase {
 
 	@Test
 	void userLogin() {
+
 		HomePage homepage = HomePage.getInstance();
 		System.out.println("Step 2: Click on sign-in button");
 		AuthenticationPage authenticationPage = homepage.clickOnSignIn();
@@ -166,6 +155,7 @@ public class AccountCreationTestCase {
 		Assert.assertEquals(actualTabNames, expectedTabNames);
 		System.out.println("Step 7: Validate options under given tab");
 		String tabName = "Women";
+
 		System.out.println("Hover over " + tabName + " tab");
 		LinkedList<String> actualOptionsUnderTab = myAccount.validateOptionsUnderTab(tabName);
 		LinkedList<String> expectedOptionsUnderTab = new LinkedList<String>();
@@ -175,6 +165,7 @@ public class AccountCreationTestCase {
 		System.out.println(actualOptionsUnderTab);
 		Assert.assertEquals(actualOptionsUnderTab, expectedOptionsUnderTab);
 	}
+
 
 	@Test(dataProvider = "productDetails")
 	void placeOrder(Product_POJO products) throws InterruptedException {
@@ -187,6 +178,7 @@ public class AccountCreationTestCase {
 		authenticationPage.enterPassword("Test_5454");
 		System.out.println("Step 5: Click on sign-in button");
 		MyAccountPage myAccount = authenticationPage.clickSignIn();
+
 		System.out.println("Step 6: Click on tab: " + products.getTabName());
 		ProductsPage productsPage = myAccount.clickOnTab(products.getTabName());
 		int numberOfProducts = productsPage.findNumberOfProducts();
@@ -218,6 +210,7 @@ public class AccountCreationTestCase {
 		detailspage.setOrderDetails(products);
 		System.out.println("Step 9: Click on add to cart button");
 		detailspage.clickonAddToCartButton();
+
 		OrderSummaryPopUp summeryPopUp = OrderSummaryPopUp.getInstance();
 		System.out.println("Step 10: Validate total products cost on order summery");
 		double actualTotalProductPrice = summeryPopUp.validateTotalProductPrice();
@@ -227,6 +220,7 @@ public class AccountCreationTestCase {
 		double expectedProductPriceNum = Double.parseDouble(expectedProductPrice);
 		String expectedQuantityTemp = products.getQuantity();
 		double expectedQuantity = Double.parseDouble(expectedQuantityTemp);
+
 		double expectedTotalProductPriceNum = expectedProductPriceNum * expectedQuantity;
 		sa.assertEquals(actualTotalProductPrice, expectedTotalProductPriceNum);
 		System.out.println("Step 11: Validate shipping cost on order summery");
@@ -236,6 +230,7 @@ public class AccountCreationTestCase {
 		String expectedShippingCost = expectedShippingCostTemp.substring(1);
 		double expectedShippingCostNum = Double.parseDouble(expectedShippingCost);
 		sa.assertEquals(actualShippingCost, expectedShippingCostNum);
+
 		System.out.println("Step 12: Validate grand total cost on order summery");
 		double actualTotalCost = summeryPopUp.validateTotalCost();
 		System.out.println("Actual Total Cost: " + "$" + actualTotalCost);
@@ -260,6 +255,7 @@ public class AccountCreationTestCase {
 		Assert.assertEquals(actualChevronsDisplayed, expectedChevrons);
 		System.out.println("Validate product and pricing details on summer details page");
 
+
 		HashMap<String, String> expectedOrderDetails = new HashMap<String, String>();
 		expectedOrderDetails.put("ProductName", products.getProductName());
 		expectedOrderDetails.put("Colour", products.getColour());
@@ -277,6 +273,7 @@ public class AccountCreationTestCase {
 		ShoppingSummaryAddressPage addressSummery = cartSummary.clickOnProceedToCheckOut();
 		String pageHeading = addressSummery.getPageTitle();
 		Assert.assertEquals(pageHeading, "ADDRESSES");
+
 		System.out.println(
 				"Validate if- Use the delivery address as the billing address. checkbox is checked by default");
 		boolean flag = addressSummery.areAddressSame();
@@ -355,6 +352,7 @@ public class AccountCreationTestCase {
 
 		return objectArray;
 	}
+
 
 	@DataProvider(name = "productDetails")
 	Object[][] readProductDetails() throws IOException {

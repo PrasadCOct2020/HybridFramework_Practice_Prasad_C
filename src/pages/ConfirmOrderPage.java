@@ -1,5 +1,6 @@
 package pages;
 
+
 import java.io.FileNotFoundException;
 
 import base.PredefinedActions;
@@ -39,6 +40,7 @@ public class ConfirmOrderPage extends PredefinedActions {
 		clickOnElementJs(confirmOrderPropFile.getLocator("clickOnConfirmMyOrderButton"),false);
 		
 		return OrderConfirmationPage.getInstance();
+
 	}
 
 }

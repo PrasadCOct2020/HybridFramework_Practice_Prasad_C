@@ -1,5 +1,6 @@
 package pages;
 
+
 import java.io.FileNotFoundException;
 import java.util.HashMap;
 
@@ -47,7 +48,6 @@ public class ProductDetailsPage extends PredefinedActions {
 
 	public HashMap<String, String> validateProductDetails() {
 		HashMap<String, String> productDetails = new HashMap<String, String>();
-
 		String prodName = getElementText(productPropFile.getLocator("productName"),true);
 		productDetails.put("Product Name", prodName);
 		String desc = getElementText(productPropFile.getLocator("productDescription"),false);
@@ -84,6 +84,7 @@ public class ProductDetailsPage extends PredefinedActions {
 		clickOnElement(productPropFile.getLocator("addToCartButton"),false);
 		
 		return OrderSummaryPopUp.getInstance();
+
 	}
 	
 		
