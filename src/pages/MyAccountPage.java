@@ -1,59 +1,71 @@
 package pages;
 
+
+import java.io.FileNotFoundException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.interactions.Actions;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import base.PredefinedActions;
+import configuration.PropertyFilesPathConstants;
+import utility.ReadPropertyFile;
 
-public class MyAccountPage extends PredefinedActions{
-	
+public class MyAccountPage extends PredefinedActions {
+
+	private ReadPropertyFile myAccountLocators;
+	private static MyAccountPage myAccount;
+
+	private MyAccountPage() {
+		try {
+			myAccountLocators = new ReadPropertyFile(PropertyFilesPathConstants.MY_ACCOUNT_PROP_FILE_PATH);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static MyAccountPage getInstance() {
+		if (myAccount == null) {
+			myAccount = new MyAccountPage();
+		}
+
+		return myAccount;
+	}
+
 	public String validateAccountName() {
-		WebDriverWait wait = new WebDriverWait(driver,10);
-		WebElement element = wait.until(ExpectedConditions.presenceOfElementLocated(By.xpath("//a[@class = 'account']/span")));
-		String accountName =element.getText();
+		String accountName = getElementText(myAccountLocators.getLocator("accountName"),true);
 		return accountName;
 	}
-	
+
 	public LinkedList<String> validateTabs() {
-		
-		WebDriverWait wait = new WebDriverWait(driver,10);
-		List<WebElement> menuTabs = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//ul[@class = 'sf-menu clearfix menu-content sf-js-enabled sf-arrows']/li/a")));
+		List<WebElement> menuTabs = getElements(myAccountLocators.getLocator("tabList"),false);
 		LinkedList<String> tabNames = new LinkedList<String>();
-		for(WebElement element: menuTabs) {
-			String str = element.getText();
+		for (WebElement element : menuTabs) {
+			String str = getElementText(element);
 			tabNames.add(str.toUpperCase());
 		}
 		return tabNames;
 	}
-	
+
+
 	public LinkedList<String> validateOptionsUnderTab(String tabName) {
-		Actions action = new Actions(driver);
-		action.moveToElement(driver.findElement(By.xpath("//ul[@class = 'sf-menu clearfix menu-content sf-js-enabled sf-arrows']/li/a[text() = '"+tabName+"']"))).build().perform();
-		WebDriverWait wait = new WebDriverWait(driver,20);
-		List<WebElement> optionsUnderTabElements = wait.until(ExpectedConditions.visibilityOfAllElementsLocatedBy(By.xpath("//ul[@class = 'sf-menu clearfix menu-content sf-js-enabled sf-arrows']//a[text() = '"+tabName+"']//parent::li/ul[@class = 'submenu-container clearfix first-in-line-xs']/li/a")));
+		mouseHover(myAccountLocators.getLocator("optionsUnderTabPartA")+tabName+myAccountLocators.getLocator("optionsUnderTabPartB"),true); 
+		List<WebElement> optionsUnderTabElements = getElements(myAccountLocators.getLocator("optionsUnderTabElementsA")+tabName+myAccountLocators.getLocator("optionsUnderTabElementsB"),true);
 		LinkedList<String> optionsUnderTab = new LinkedList<String>();
-		for(WebElement element: optionsUnderTabElements) {
-			String str = element.getText();
+		for (WebElement element : optionsUnderTabElements) {
+			String str = getElementText(element);
 			optionsUnderTab.add(str.toUpperCase());
 		}
-		
+
 		return optionsUnderTab;
 	}
-	
+
 	public ProductsPage clickOnTab(String tabName) {
-		
-		
-		WebDriverWait wait = new WebDriverWait(driver,10);
-		wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//ul[@class = 'sf-menu clearfix menu-content sf-js-enabled sf-arrows']/li/a[text() = '"+tabName+"']"))).click();
-		
-		return new ProductsPage();
+
+		clickOnElement(myAccountLocators.getLocator("tabClickA")+tabName+myAccountLocators.getLocator("tabClickB"),false);
+
+		return ProductsPage.getInstance();
 	}
-	
 
 }

@@ -1,19 +1,42 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.FileNotFoundException;
 
 import base.PredefinedActions;
+import configuration.PropertyFilesPathConstants;
+import utility.ReadPropertyFile;
 
 public class OrderConfirmationPage extends PredefinedActions {
-	
-	public String getPageTitle() {
-		WebDriverWait wait = new WebDriverWait(driver, 10);
-		String pageHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".page-heading")))
-				.getText();
 
-		return pageHeader;
+	private ReadPropertyFile orderConfirmationPropFile;
+	private static OrderConfirmationPage orderConfirmation;
+
+	private OrderConfirmationPage() {
+		try {
+			orderConfirmationPropFile = new ReadPropertyFile(
+					PropertyFilesPathConstants.ORDER_CONFIRMATION_PROP_FILE_PATH);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+
+	public static OrderConfirmationPage getInstance() {
+		if (orderConfirmation == null) {
+			orderConfirmation = new OrderConfirmationPage();
+		}
+
+		return orderConfirmation;
+	}
+
+	public String getPageHeader() {
+
+		return getElementText(orderConfirmationPropFile.getLocator("pageHeader"),true);
+	}
+	
+	public String getOrderConfirmationMsg() {
+		return getElementText(orderConfirmationPropFile.getLocator("orderConfirmationText"),false);
 	}
 
 }

@@ -30,7 +30,8 @@ public class AccountCreationTestCase_DataProviderParameterPassing {
 	void createNewAccount(String email, String title, String firstName, String lastName, String password,
 			String birthDay, String birthMonth, String birthYear, String company, String address, String city,
 			String state, String postalCode, String mobilePhone) throws InterruptedException {
-		HomePage homepage = new HomePage();
+
+		HomePage homepage =HomePage.getInstance();
 		System.out.println("Step 2: Click on Sign-in button");
 		AuthenticationPage authPage = homepage.clickOnSignIn();
 		String pageTitle = authPage.getPageTitle();
@@ -94,7 +95,9 @@ public class AccountCreationTestCase_DataProviderParameterPassing {
 	void testValidationRule() throws InterruptedException {
 		System.out.println(
 				"Verify validation rule on create an account page and all required fields are not populated and user clicks on register button");
-		HomePage homepage = new HomePage();
+
+		HomePage homepage = HomePage.getInstance();
+
 		System.out.println("Step 2: Click on Sign-in button");
 		AuthenticationPage authPage = homepage.clickOnSignIn();
 		String pageTitle = authPage.getPageTitle();

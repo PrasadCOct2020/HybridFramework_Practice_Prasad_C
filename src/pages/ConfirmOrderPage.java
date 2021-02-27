@@ -1,31 +1,46 @@
 package pages;
 
-import org.openqa.selenium.By;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
+
+import java.io.FileNotFoundException;
 
 import base.PredefinedActions;
+import configuration.PropertyFilesPathConstants;
+import utility.ReadPropertyFile;
 
 public class ConfirmOrderPage extends PredefinedActions {
 	
+	private ReadPropertyFile confirmOrderPropFile;
+	private static ConfirmOrderPage confirmOrder;
+	
+	private ConfirmOrderPage() {
+		try {
+			confirmOrderPropFile = new ReadPropertyFile(PropertyFilesPathConstants.CONFIRM_ORDER_PAGE_PROP_FILE_PATH);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	public static ConfirmOrderPage getInstance() {
+		if(confirmOrder==null) {
+			confirmOrder = new ConfirmOrderPage();
+		}
+		return confirmOrder;
+	}
+	
+	
 	public String getPageTitle() {
-		WebDriverWait wait = new WebDriverWait(driver, 10);
-		String pageHeader = wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".page-heading")))
-				.getText();
-
+		
+		String pageHeader = getElementText(confirmOrderPropFile.getLocator("pageHeader"),true);
 		return pageHeader;
 	}
 	
-	public OrderConfirmationPage clickOnConfirmOrder() {
+	public OrderConfirmationPage clickOnConfirmMyOrder() {
 		
-		WebDriverWait wait = new WebDriverWait(driver, 10);
-		WebElement element = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//button[@class='button btn btn-default button-medium']")));
-		JavascriptExecutor je = (JavascriptExecutor)driver;
-		je.executeScript("arguments[0].click();", element);
+		clickOnElementJs(confirmOrderPropFile.getLocator("clickOnConfirmMyOrderButton"),false);
 		
-		return new OrderConfirmationPage();
+		return OrderConfirmationPage.getInstance();
+
 	}
 
 }

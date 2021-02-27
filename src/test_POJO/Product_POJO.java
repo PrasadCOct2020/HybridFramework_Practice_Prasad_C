@@ -10,6 +10,16 @@ public class Product_POJO {
 	private String styles;
 	private String colour;
 	private String shippingCost;
+
+	private String popUpError;
+	
+	public String getPopUpError() {
+		return popUpError;
+	}
+	public void setPopUpError(String popUpError) {
+		this.popUpError = popUpError;
+	}
+
 	public String getShippingCost() {
 		return shippingCost;
 	}
